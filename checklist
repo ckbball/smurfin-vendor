@@ -1,0 +1,5 @@
+- create proto file
+- create datastore handle
+- create repo implmentations of endpoint functions
+- create api handlers
+- create event structs and proper event handling functions

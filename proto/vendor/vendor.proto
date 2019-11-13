@@ -1,0 +1,62 @@
+syntax = "proto3";
+
+package vendor;
+
+service VendorService {
+  rpc SignUp(Vendor) returns (Response) {}
+  rpc Login(Vendor) returns (Token) {}
+  rpc ListAccounts(Vendor) returns (Response) {}
+  rpc PutAccountUp(Request) returns (Response) {}
+  rpc TakeAccountDown(Request) returns (Response) {}
+  rpc Withdraw(Request) returns (Response) {}
+  rpc ValidateToken(Token) returns (Token) {}
+}
+
+message Vendor {
+  string id = 1;
+  string name = 2;
+  string email = 3;
+  string password = 4;
+  bool status = 5;
+  string token = 6;
+}
+
+message Request {
+  string vendor_id = 1;
+  Token token = 2;
+  string amount = 3;
+  Account account = 4;
+}
+
+message Account {
+    string id = 1;
+    string login_name = 2;
+    string login_pass = 3;
+    string email = 4;
+    string email_pass = 5;
+    int32 solo_rank = 6;
+    int32 flex_rank = 7;
+    int32 blue = 8;
+    int32 rp = 9;
+    int32 price_dollars = 10;
+    int32 price_cents = 11;
+}
+
+message Token {
+  string token = 1;
+  bool valid = 2;
+  repeated Error errors = 3;
+}
+
+message Error {
+  int32 code = 1;
+  string description = 2;
+}
+
+message Response {
+  Vendor vendor = 1;
+  Account account = 2;
+  Token token = 3;
+  repeated Error errors = 4;
+  string withdraw_status = 5;
+}
