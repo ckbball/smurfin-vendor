@@ -1,0 +1,34 @@
+this service handles the vendor accounts and actions
+- vendor login and sign up
+- vendor puts up item for sale on market
+- vendor looks at their current items and sold items
+- vendor can take down an account
+- vendor can withdraw their earnings.
+
+login:
+endpoint
+proto defs
+
+sign up: 
+endpoint 
+proto defs
+
+put up item for sale:
+endpoint 
+proto defs
+event sending item to catalog
+
+look up items:
+endpoint
+proto defs
+
+take account down:
+endpoint 
+proto defs
+event sending take down to catalog
+
+withdraw:
+endpoint 
+proto defs
+event to payments to send vendor withdraw method the money
+
