@@ -5,7 +5,7 @@ package vendor;
 service VendorService {
   rpc SignUp(Vendor) returns (Response) {}
   rpc Login(Vendor) returns (Token) {}
-  rpc ListAccounts(Vendor) returns (Response) {}
+  rpc ListAccounts(Request) returns (Response) {}
   rpc PutAccountUp(Request) returns (Response) {}
   rpc TakeAccountDown(Request) returns (Response) {}
   rpc Withdraw(Request) returns (Response) {}
@@ -26,6 +26,7 @@ message Request {
   Token token = 2;
   string amount = 3;
   Account account = 4;
+  int32 page_num = 5;
 }
 
 message Account {
@@ -40,6 +41,7 @@ message Account {
     int32 rp = 9;
     int32 price_dollars = 10;
     int32 price_cents = 11;
+    string vendor_id = 12;
 }
 
 message Token {
@@ -59,4 +61,5 @@ message Response {
   Token token = 3;
   repeated Error errors = 4;
   string withdraw_status = 5;
+  repeated Account accounts = 6;
 }
