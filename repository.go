@@ -9,13 +9,12 @@ import (
 )
 
 type repository interface {
-  SignUp(vendor *pb.Vendor) (*pb.Vendor, error)
-  Login(vendor *pb.Vendor) (*pb.Token, error)
-  TakeAccountDown(request *pb.Request) (bool, error)
-  ListAccounts(request *pb.Request) ([]*pb.Account, error)
-  PutAccountUp(request *pb.Request) (*pb.Account, error)
-  Withdraw(request *pb.Request) (string, error)
-  ValidateToken(token *pb.Token) (*pb.Token, error)
+  UpdateAccount(request *pb.Request) (bool, error)
+  ListAccounts(request *pb.Request) ([]*pb.Account, error) //
+  CreateAccount(request *pb.Request) (*pb.Account, error)
+  Create(vendor *pb.Vendor) error//
+  Update(vendor *pb.Vendor) (*pb.Vendor, error)//
+  Delete(vendor *pb.Vendor) error//
 }
 
 type VendorRepository struct {
@@ -61,4 +60,46 @@ func (repository *VendorRepository) ListAccounts(req *pb.Request) ([]*pb.Account
   }
 
   return items, nil
+}
+
+
+// Do password crypto stuff in handler
+func (repo *VendorRepository) Create(vendor *pb.Vendor) (*pb.Vendor, error) {
+  // check that email is not already in use
+  rep, err := repo.collection.FindOne(context.TODO(), bson.D{{"VendorId", { "$eq", vendor.Id}}}, nil)
+  if err != nil {
+    return nil, error
+  }
+  if rep != nil {
+    return nil, nil
+  }
+
+  // create new account
+  _, err := repo.collection.InsertOne(context.Background(), vendor)
+
+  // return vendor with updated model
+  return vendor, err
+}
+
+func (repo *VendorRepository) Update(vendor *pb.Vendor) (*pb.Vendor, error) {
+  deleteResult, err := repo.collection.Delete(context.TODO(), bson.D{{"VendorId", { "$eq", vendor.Id}}})
+  if err != nil {
+    return err
+  }
+
+  _, err = repo.collection.InsertOne(context.Background(), vendor)
+  return vendor, err
+}
+
+func (repo *VendorRepository) Delete(vendor *pb.Vendor) error {
+  deleteResult, err := repo.collection.Delete(context.TODO(), bson.D{{"VendorId", { "$eq", vendor.Id}}})
+  if err != nil {
+    return err
+  }
+  fmt.Printf("Deleted %v documents\n", deleteResult.DeletedCount)
+  return nil
+}
+
+func (repo *VendorRepository) UpdateAccount(request *pb.Request) (bool, error) {
+  
 }

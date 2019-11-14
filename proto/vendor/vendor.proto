@@ -8,7 +8,6 @@ service VendorService {
   rpc ListAccounts(Request) returns (Response) {}
   rpc PutAccountUp(Request) returns (Response) {}
   rpc TakeAccountDown(Request) returns (Response) {}
-  rpc Withdraw(Request) returns (Response) {}
   rpc ValidateToken(Token) returns (Token) {}
 }
 
@@ -24,9 +23,8 @@ message Vendor {
 message Request {
   string vendor_id = 1;
   Token token = 2;
-  string amount = 3;
-  Account account = 4;
-  int32 page_num = 5;
+  Account account = 3;
+  int32 page_num = 4;
 }
 
 message Account {
@@ -42,6 +40,7 @@ message Account {
     int32 price_dollars = 10;
     int32 price_cents = 11;
     string vendor_id = 12;
+    string status = 13;
 }
 
 message Token {
@@ -60,6 +59,5 @@ message Response {
   Account account = 2;
   Token token = 3;
   repeated Error errors = 4;
-  string withdraw_status = 5;
-  repeated Account accounts = 6;
+  repeated Account accounts = 5;
 }
