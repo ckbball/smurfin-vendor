@@ -62,6 +62,23 @@ func (repository *VendorRepository) ListAccounts(req *pb.Request) ([]*pb.Account
   return items, nil
 }
 
+func (repo *VendorRepository) UpdateAccount(request *pb.Request) (bool, error) {
+  // get account from db
+
+  // delete account?
+  deleteResult, err := repo.collection.Delete(context.TODO(), bson.D{{"Id", { "$eq", request.Account.Id}}})
+  if err != nil {
+    return err
+  }
+
+  _, err = repo.collection.InsertOne(context.Background(), request.Account)
+  return true, err
+}
+
+func (repo *VendorRepository) CreateAccount(request *pb.Request) (*pb.Account, error) {
+  _, err = repo.collection.InsertOne(context.Background(), request.Account)
+  return request.Account, err
+}
 
 // Do password crypto stuff in handler
 func (repo *VendorRepository) Create(vendor *pb.Vendor) (*pb.Vendor, error) {
