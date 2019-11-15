@@ -121,3 +121,37 @@ func (h *handler) PutAccountUp(ctx context.Context, req *pb.Request, res *pb.Res
 
   return nil
 }
+
+// Take account off of catalog?
+// idk what this supposed to be
+func (h *handler) TakeAccountDown(ctx context.Context, req *pb.Request, res *pb.Response) error {
+  // validate vendor id
+  if vendor, err := h.repo.Get(req.VendorId); err != nil {
+    return err
+  }
+  if vendor == "" {
+    return errors.New("Invalid Vendor Id")
+  }
+
+  // find account
+  req.Status = "down"
+  if account, err := h.repo.UpdateAccount(req); err != nil {
+    return err
+  }
+
+  // set response
+  res.Account = account
+
+  // publish event AccountTakenDown, catalog listening so that it will remove this account from its db
+  // type AccountTakenDown struct {
+  //   Id: account.Id
+  // }
+
+  // return
+  return nil
+}
+
+// idk what this supposed to be
+func (h *handler) ListAccounts(ctx context.Context, req *pb.Request, res *pb.Response) error {
+
+}

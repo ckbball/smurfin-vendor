@@ -38,7 +38,7 @@ func (repository *VendorRepository) ListAccounts(req *pb.Request) ([]*pb.Account
   findOptions := options.Find()
   findOptions.SetLimit(20)
   findOptions.SetSort(SortBy.Descending("id"))
-  findOptions.SetSkip(req.PageNum)
+  findOptions.SetSkip(req.PageNum * 20)
 
   var items []*pb.Account
   cur, err := repository.collection.Find(context.TODO(), filter, findOptions)
