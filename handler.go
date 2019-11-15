@@ -10,6 +10,7 @@ import (
   "github.com/ThreeDotsLabs/watermill/message"
   pb "github.com/ckbball/smurfin-vendor/proto/vendor"
   "golang.org/x/crypto/bcrypt"
+  "log"
   "time"
 )
 
@@ -63,5 +64,22 @@ func (h *handler) ValidateToken(ctx context.Context, req *pb.Token, res *pb.Toke
 }
 
 func (h *handler) Login(ctx context.Context, req *pb.Vendor, res *pb.Token) error {
+  vendor, err := h.repo.GetByEmail(req.Email)
+  log.Println(vendor, err)
+  if err != nil {
+    return err
+  }
 
+  // Compare given password to stored hash
+  if err := bcrypt.CompareHashAndPassword([]byte(vendor.Password), []byte(req.Password)); err != nil {
+    return err
+  }
+
+  token, err := h.tokenService.Encode(vendor)
+  if err != nil {
+    return err
+  }
+
+  res.Token = token
+  return nil
 }
