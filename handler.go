@@ -61,3 +61,7 @@ func (h *handler) ValidateToken(ctx context.Context, req *pb.Token, res *pb.Toke
 
   return nil
 }
+
+func (h *handler) Login(ctx context.Context, req *pb.Vendor, res *pb.Token) error {
+
+}
