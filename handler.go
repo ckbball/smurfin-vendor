@@ -151,7 +151,15 @@ func (h *handler) TakeAccountDown(ctx context.Context, req *pb.Request, res *pb.
   return nil
 }
 
-// idk what this supposed to be
+// List all accounts for a specific vendor,
 func (h *handler) ListAccounts(ctx context.Context, req *pb.Request, res *pb.Response) error {
+  // grab accounts
+  if accounts, err := h.repo.ListAccounts(req); err != nil {
+    return err
+  }
 
+  // set response
+  res.Accounts = accounts
+  //return
+  return nil
 }
