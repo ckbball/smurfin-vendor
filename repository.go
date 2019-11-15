@@ -15,6 +15,8 @@ type repository interface {
   Create(vendor *pb.Vendor) error//
   Update(vendor *pb.Vendor) (*pb.Vendor, error)//
   Delete(vendor *pb.Vendor) error//
+  GetByEmail(email string) (*pb.Vendor, error)
+  Get(id string) (*pb.Vendor, error)
 }
 
 type VendorRepository struct {
@@ -83,7 +85,7 @@ func (repo *VendorRepository) CreateAccount(request *pb.Request) (*pb.Account, e
 // Do password crypto stuff in handler
 func (repo *VendorRepository) Create(vendor *pb.Vendor) (*pb.Vendor, error) {
   // check that email is not already in use
-  rep, err := repo.collection.FindOne(context.TODO(), bson.D{{"VendorId", { "$eq", vendor.Id}}}, nil)
+  rep, err := repo.collection.FindOne(context.TODO(), bson.D{{"Id", { "$eq", vendor.Id}}}, nil)
   if err != nil {
     return nil, error
   }
@@ -99,7 +101,7 @@ func (repo *VendorRepository) Create(vendor *pb.Vendor) (*pb.Vendor, error) {
 }
 
 func (repo *VendorRepository) Update(vendor *pb.Vendor) (*pb.Vendor, error) {
-  deleteResult, err := repo.collection.Delete(context.TODO(), bson.D{{"VendorId", { "$eq", vendor.Id}}})
+  deleteResult, err := repo.collection.Delete(context.TODO(), bson.D{{"Id", { "$eq", vendor.Id}}})
   if err != nil {
     return err
   }
@@ -109,7 +111,7 @@ func (repo *VendorRepository) Update(vendor *pb.Vendor) (*pb.Vendor, error) {
 }
 
 func (repo *VendorRepository) Delete(vendor *pb.Vendor) error {
-  deleteResult, err := repo.collection.Delete(context.TODO(), bson.D{{"VendorId", { "$eq", vendor.Id}}})
+  deleteResult, err := repo.collection.Delete(context.TODO(), bson.D{{"Id", { "$eq", vendor.Id}}})
   if err != nil {
     return err
   }
@@ -117,6 +119,18 @@ func (repo *VendorRepository) Delete(vendor *pb.Vendor) error {
   return nil
 }
 
-func (repo *VendorRepository) UpdateAccount(request *pb.Request) (bool, error) {
-  
+func (repo *VendorRepository) Get(id string) (*pb.Vendor, error) {
+  vendor, err := repo.collection.FindOne(context.TODO(), bson.D{{"Id", { "$eq", id}}}, nil)
+  if err != nil {
+    return nil, error
+  }
+  return vendor, nil
+}
+
+func (repo *VendorRepository) GetByEmail(email string) (*pb.Vendor, error) {
+  vendor, err := repo.collection.FindOne(context.TODO(), bson.D{{"Email", { "$eq", email}}}, nil)
+  if err != nil {
+    return nil, error
+  }
+  return vendor, nil
 }
