@@ -78,6 +78,7 @@ func (repo *VendorRepository) UpdateAccount(request *pb.Request) (bool, error) {
 }
 
 func (repo *VendorRepository) CreateAccount(request *pb.Request) (*pb.Account, error) {
+  request.Account.VendorId = request.VendorId
   _, err = repo.collection.InsertOne(context.Background(), request.Account)
   return request.Account, err
 }

@@ -9,6 +9,8 @@ service VendorService {
   rpc PutAccountUp(Request) returns (Response) {}
   rpc TakeAccountDown(Request) returns (Response) {}
   rpc ValidateToken(Token) returns (Token) {}
+  rpc UpdateVendor(Vendor) returns (Response) {}
+  rpc GetVendor(Vendor) returns (Response) {}
 }
 
 message Vendor {

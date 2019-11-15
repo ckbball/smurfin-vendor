@@ -83,3 +83,41 @@ func (h *handler) Login(ctx context.Context, req *pb.Vendor, res *pb.Token) erro
   res.Token = token
   return nil
 }
+
+func (h *handler) UpdateVendor(ctx context.Context, req *pb.Vendor, res *pb.Response) error {
+  if vendor, err := h.repo.Update(req); err != nil {
+    return err
+  }
+  res.Vendor = vendor
+  return nil
+}
+
+func (h *handler) GetVendor(ctx context.Context, req *pb.Vendor, res *pb.Response) error {
+  if vendor, err := h.repo.Get(req.Id); err != nil {
+    return err
+  }
+  res.Vendor = vendor
+  return nil
+}
+
+// Submit an account to be added to catalog, must be validated by smurfin agents
+func (h *handler) PutAccountUp(ctx context.Context, req *pb.Request, res *pb.Response) error {
+  // validate vendor id
+  if vendor, err := h.repo.Get(req.VendorId); err != nil {
+    return err
+  }
+  if vendor == "" {
+    return errors.New("Invalid Vendor Id")
+  }
+
+  // then add account to db with pending status
+  req.Account.status = "pending"
+  if account, err := h.repo.CreateAccount(req); err != nil {
+    return err
+  }
+  res.Account = account
+
+  // then publish event AccountSubmitted which the agent-service is listening to so it can be handed off to agents to complete validation process
+
+  return nil
+}
