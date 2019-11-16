@@ -1,20 +1,15 @@
-// 3 event structs
-// withdraw
+// 2 event structs
+
 // take down
-// put up
 
 package main
 
 import ()
 
-// to payment
-type WithdrawMoneyEvent struct {
-}
-
 // to catalog
 type TakeAccountDownEvent struct {
 }
 
-// to catalog
+// to agent
 type NewAccountEvent struct {
 }

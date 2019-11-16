@@ -16,6 +16,7 @@ import (
 
 type handler struct {
   repo         repository
+  journal      journalRepository
   tokenService Authable
   subscriber   message.Subscriber
   publisher    message.Publisher
